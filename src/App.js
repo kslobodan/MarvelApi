@@ -1,9 +1,8 @@
-import logo from "./logo.svg";
 import "./App.css";
-import Characters from "./components/Characters";
+import CharactersList from "./components/CharactersList";
 
 function App() {
-  return <Characters />;
+  return <CharactersList />;
 }
 
 export default App;
