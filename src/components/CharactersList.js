@@ -1,24 +1,23 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Character from "./Character";
 import Search from "./Search";
 import { Row, Col, Container } from "reactstrap";
 
 const CharactersList = () => {
   const [characters, setCharacters] = useState([]);
-  const [startsWith, setStartsWith] = useState("a");
+  const [startsWith, setStartsWith] = useState("");
   const [limitCharNumber, setLimitCharacterNumber] = useState(0);
 
   const handleSetStartsWithValue = (value) => {
-    // alert(value);
-    console.log("value: " + value);
     setStartsWith(value);
-    console.log("startsWith: ", startsWith);
-    alert(startsWith);
+  };
+
+  const handleSetLimitCharacterNumber = (value) => {
+    setLimitCharacterNumber(value);
   };
 
   useEffect(() => {
-    // console.log("starts with:" + startsWith);
-    // alert(startsWith);
+    console.log("starts with in use effect:" + startsWith);
     const fetchCharacters = async () => {
       console.log("test");
       const hash =
@@ -28,10 +27,18 @@ const CharactersList = () => {
 
       var md5 = require("md5");
       console.log(md5(hash));
-      //bf0fa7351d69ecb594529f85a1a9f49f
+
+      const startWith =
+        startsWith === "" ? "" : "nameStartsWith=" + startsWith + "&";
+      console.log("Starts with: " + startWith);
+
+      const limit =
+        limitCharNumber <= 1 || limitCharNumber > 100
+          ? ""
+          : "limit=" + limitCharNumber + "&";
 
       const response = await fetch(
-        `https://gateway.marvel.com/v1/public/characters?ts=${
+        `https://gateway.marvel.com/v1/public/characters?${startWith}${limit}ts=${
           process.env.REACT_APP_MARVEL_TS
         }&apikey=${process.env.REACT_APP_MARVEL_PUBLIC_KEY}&hash=${md5(hash)}`
       );
@@ -53,10 +60,10 @@ const CharactersList = () => {
     };
 
     fetchCharacters();
-  }, []);
+  }, [startsWith, limitCharNumber]);
 
   return (
-    <div>
+    <Fragment>
       <div>
         <Search
           setStartsWithValue={handleSetStartsWithValue}
@@ -66,18 +73,18 @@ const CharactersList = () => {
       <Container>
         <Row>
           <Col>
-            {characters.map((ch) => (
+            {characters.map((character) => (
               <Character
-                key={ch.characterName}
-                characterName={ch.characterName}
-                imgHref={ch.imgHref}
-                imgUrl={ch.imgUrl}
+                key={character.id}
+                characterName={character.characterName}
+                imgHref={character.imgHref}
+                imgUrl={character.imgUrl}
               />
             ))}
           </Col>
         </Row>
       </Container>
-    </div>
+    </Fragment>
   );
 };
 

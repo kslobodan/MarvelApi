@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faEraser } from "@fortawesome/free-solid-svg-icons";
 import classes from "./Search.module.css";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 
 const Search = (props) => {
   const [startsWith, setStartsWith] = useState("");
@@ -27,7 +27,7 @@ const Search = (props) => {
   };
 
   return (
-    <div>
+    <Fragment>
       <div className={classes.topnav}>
         <a className={classes.active} href="#home">
           Home
@@ -58,7 +58,8 @@ const Search = (props) => {
               {/* <button type="submit" onClick={props.fetchCharacters}> */}
               <button
                 type="submit"
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault();
                   props.setStartsWithValue(startsWith);
                   props.setLimitCharacterNumberValue(limitCharacterNumber);
                 }}
@@ -81,7 +82,7 @@ const Search = (props) => {
       <div style={{ padding: 16 + "px" }}>
         <h3>Marvel heroes</h3>
       </div>
-    </div>
+    </Fragment>
   );
 };
 

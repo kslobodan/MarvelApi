@@ -3,6 +3,7 @@
   border: 1px solid #ccc;
   float: left;
   width: 180px;
+  height: 410px;
 }
 
 .gallery:hover {
@@ -17,7 +18,8 @@
 .desc {
   padding: 15px;
   text-align: center;
-
+  font-size: small;
+  height: 60px;
   color: white;
   text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000,
     -1px -1px 0 #000;
