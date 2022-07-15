@@ -1,0 +1,40 @@
+.top {
+  height: 50px;
+}
+
+.title {
+  padding: 15px;
+  text-align: center;
+  font-size: x-large;
+  height: 60px;
+  color: white;
+  text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000,
+    -1px -1px 0 #000;
+}
+
+.img {
+  text-align: center;
+}
+
+.modified {
+  font-size: small;
+  color: white;
+  text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000,
+    -1px -1px 0 #000;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.desc {
+  background-color: white;
+  /* padding: 15px; */
+  text-align: center;
+  font-size: medium;
+  /* height: 60px; */
+  /* color: white;
+  text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000,
+    -1px -1px 0 #000; */
+}
+/* .button {
+  text-align: center;
+} */

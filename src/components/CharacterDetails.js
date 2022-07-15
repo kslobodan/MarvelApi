@@ -1,22 +1,42 @@
-import React, { Fragment } from "react";
+import { useLocation } from "react-router-dom";
+import { Container } from "reactstrap";
+import classes from "./CharacterDetails.module.css";
+import { Link } from "react-router-dom";
 
-const CharacterDetails = (
-  characterName,
-  imgUrl,
-  imgHref,
-  dateModified,
-  description
-) => {
+const CharacterDetails = () => {
+  const params = useLocation().state;
+
+  const dadeModified = params.modified.substring(
+    0,
+    params.modified.indexOf("T")
+  );
+
   return (
-    <Fragment>
-      <p>Hiiiiii</p>
-      {/* <div>{characterName}</div>
-      <a href={imgHref}>
-        <img src={imgUrl} alt={characterName} width="600" height="400" />
-      </a>
-      <p>Date modified: {dateModified}</p>
-      <p>{description}</p> */}
-    </Fragment>
+    <Container>
+      <div className={classes.top}></div>
+      <div className={classes.title}>{params.characterName}</div>
+      <div className={classes.img}>
+        <a href={params.imgHref}>
+          <img
+            src={params.imgUrl + "/portrait_xlarge.jpg"}
+            alt={params.characterName}
+          />
+        </a>
+      </div>
+      <div className={classes.modified}>
+        <p>Date modified: {dadeModified}</p>
+      </div>
+      <div className={classes.desc}>
+        <p>{params.description}</p>
+      </div>
+      <div className="row">
+        <div className="col text-center">
+          <Link to="/characters">
+            <button className="btn btn-primary"> Back</button>
+          </Link>
+        </div>
+      </div>
+    </Container>
   );
 };
 

@@ -1,14 +1,53 @@
 import classes from "./Character.module.css";
+import { Link } from "react-router-dom";
 
-const Character = ({ imgHref, imgUrl, characterName }) => {
+const Character = ({
+  characterId,
+  imgHref,
+  imgUrl,
+  characterName,
+  description,
+  modified,
+}) => {
   return (
     <div className={classes.gallery}>
       <a href={imgHref}>
-        <img src={imgUrl} alt={characterName} width="600" height="400" />
+        <img src={imgUrl + "/portrait_medium.jpg"} alt={characterName} />
       </a>
       <div className={classes.desc}>{characterName}</div>
-      <button className="btn btn-primary btn-block">Details</button>
-      <button className="btn btn-info btn-block">Comics</button>
+      <Link
+        // params={{
+        //   imgHref: imgHref,
+        //   imgUrl: imgUrl,
+        //   characterName: characterName,
+        // }}
+        // imgUrl={imgUrl}
+        // characterName={characterName}
+        // to={`characters/${characterName}/details`}
+
+        to={{
+          pathname: `characters/${characterName}/details`,
+          state: {
+            imgHref: imgHref,
+            imgUrl: imgUrl,
+            characterName: characterName,
+            description: description,
+            modified: modified,
+          },
+        }}
+      >
+        <button className="btn btn-primary btn-block">Details</button>
+      </Link>
+      <Link
+        to={{
+          pathname: `characters/${characterName}/comics`,
+          state: {
+            characterId: characterId,
+          },
+        }}
+      >
+        <button className="btn btn-info btn-block">Comics</button>
+      </Link>
     </div>
   );
 };
