@@ -1,13 +1,16 @@
-import React from "react";
 import classes from "./Comic.module.css";
 
-const Comic = (title, imgHref, imgUrl, description) => {
+const Comic = (props) => {
+  console.log("props: " + props.title);
+  console.log("desc: " + props.desc);
+
   return (
     <div className={classes.gallery}>
-      {/* <a href={imgHref}>
-        <img src={imgUrl + "/portrait_medium.jpg"} alt={characterName} />
-      </a> */}
-      <div className={classes.desc}>{title}</div>
+      <div className={classes.title}>{props.title}</div>
+      <a href={props.imgHref}>
+        <img src={props.imgUrl + "/portrait_medium.jpg"} alt={props.title} />
+      </a>
+      <div className={classes.desc}>{props.desc}</div>
     </div>
   );
 };

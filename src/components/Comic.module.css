@@ -2,8 +2,8 @@
   margin: 5px;
   border: 1px solid #ccc;
   float: left;
-  width: 180px;
-  height: 410px;
+  width: 200px;
+  height: 379px;
 }
 
 .gallery:hover {
@@ -13,6 +13,16 @@
 .gallery img {
   width: 100%;
   height: auto;
+}
+
+.title {
+  padding: 15px;
+  height: 80px;
+  text-align: center;
+  font-size: medium;
+  color: white;
+  text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000,
+    -1px -1px 0 #000;
 }
 
 .desc {

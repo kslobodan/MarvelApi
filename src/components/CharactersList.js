@@ -9,6 +9,7 @@ const CharactersList = () => {
   const [startsWith, setStartsWith] = useState("");
   const [limitCharNumber, setLimitCharacterNumber] = useState(0);
   const [errorGettingCharacters, setErrorGettingCharacters] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("Error getting characters");
   const [charactersListEmpty, setCharactersListEmpty] = useState(false);
 
   const handleSetStartsWithValue = (value) => {
@@ -42,7 +43,6 @@ const CharactersList = () => {
         }&apikey=${process.env.REACT_APP_MARVEL_PUBLIC_KEY}&hash=${md5(hash)}`
       );
       const responseData = await response.json();
-
       const loadedCharacters = [];
 
       if (
@@ -68,7 +68,12 @@ const CharactersList = () => {
             loadedCharacters.push(character);
           }
         } else setCharactersListEmpty(true);
-      } else setErrorGettingCharacters(true);
+      } else {
+        if (responseData.code === "RequestThrottled")
+          setErrorMessage("Too many Api requests, try latter...");
+
+        setErrorGettingCharacters(true);
+      }
 
       setCharacters(loadedCharacters);
     };
@@ -109,7 +114,7 @@ const CharactersList = () => {
       )}
       {errorGettingCharacters && (
         <div className={classes.errorMessage}>
-          <p>Error getting characters</p>
+          <p>{errorMessage}</p>
         </div>
       )}
       {charactersListEmpty && (

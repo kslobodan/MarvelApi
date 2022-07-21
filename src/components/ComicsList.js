@@ -2,6 +2,8 @@ import React from "react";
 import { Fragment, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Row, Col, Container } from "reactstrap";
+import Comic from "./Comic";
+import { Link } from "react-router-dom";
 
 const ComicsList = () => {
   const [comics, setComics] = useState([]);
@@ -32,8 +34,8 @@ const ComicsList = () => {
         const comic = {
           id: key.id,
           title: key.title,
-          // imgHref: key.name,
-          // imgUrl: key.thumbnail.path,
+          imgHref: key.name,
+          imgUrl: key.thumbnail.path,
           description: key.description,
           modified: key.modified,
         };
@@ -41,6 +43,14 @@ const ComicsList = () => {
       }
 
       setComics(loadedComics);
+      console.log("loaded comics: " + loadedComics);
+      console.log("title: " + loadedComics[0].title);
+      console.log("comics: " + comics);
+      console.log("comic1: " + comics[0]);
+      const maped = comics.map((comic) => {
+        return comic.title;
+      });
+      console.log("maped: " + loadedComics);
     };
 
     fetchComics();
@@ -48,15 +58,20 @@ const ComicsList = () => {
 
   return (
     <Fragment>
-      <div>Comics list</div>
+      <Link to="/characters">
+        <button className="btn btn-primary  btn-left"> Back</button>
+      </Link>
       <Container>
         <Row>
           <Col>
-            {comics.map((comic) => (
-              <ComicsList
-                id={comic.id}
-                title={comic.title}
-                description={comic.description}
+            {comics.map((comicInfo) => (
+              <Comic
+                key={comicInfo.id}
+                comicId={comicInfo.id}
+                title={comicInfo.title}
+                description={comicInfo.description}
+                imgHref={comicInfo.imgHref}
+                imgUrl={comicInfo.imgUrl}
               />
             ))}
           </Col>
