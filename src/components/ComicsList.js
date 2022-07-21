@@ -3,7 +3,7 @@ import { Fragment, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Row, Col, Container } from "reactstrap";
 import Comic from "./Comic";
-import { Link } from "react-router-dom";
+import SearchComics from "./SearchComics";
 
 const ComicsList = () => {
   const [comics, setComics] = useState([]);
@@ -43,14 +43,6 @@ const ComicsList = () => {
       }
 
       setComics(loadedComics);
-      console.log("loaded comics: " + loadedComics);
-      console.log("title: " + loadedComics[0].title);
-      console.log("comics: " + comics);
-      console.log("comic1: " + comics[0]);
-      const maped = comics.map((comic) => {
-        return comic.title;
-      });
-      console.log("maped: " + loadedComics);
     };
 
     fetchComics();
@@ -58,9 +50,10 @@ const ComicsList = () => {
 
   return (
     <Fragment>
-      <Link to="/characters">
-        <button className="btn btn-primary  btn-left"> Back</button>
-      </Link>
+      <div>
+        <SearchComics />
+      </div>
+
       <Container>
         <Row>
           <Col>

@@ -16,15 +16,6 @@ const Character = ({
       </a>
       <div className={classes.desc}>{characterName}</div>
       <Link
-        // params={{
-        //   imgHref: imgHref,
-        //   imgUrl: imgUrl,
-        //   characterName: characterName,
-        // }}
-        // imgUrl={imgUrl}
-        // characterName={characterName}
-        // to={`characters/${characterName}/details`}
-
         to={{
           pathname: `characters/${characterName}/details`,
           state: {

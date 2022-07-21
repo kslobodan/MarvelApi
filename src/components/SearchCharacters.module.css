@@ -78,3 +78,8 @@ h3 {
     border: 1px solid #ccc;
   }
 }
+
+.Link {
+  /* padding: 14px 16px !important; */
+  margin: 2px;
+}

@@ -1,9 +1,7 @@
 import classes from "./Comic.module.css";
 
+// const Comic = (comicId, title, description) => {
 const Comic = (props) => {
-  console.log("props: " + props.title);
-  console.log("desc: " + props.desc);
-
   return (
     <div className={classes.gallery}>
       <div className={classes.title}>{props.title}</div>

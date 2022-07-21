@@ -1,29 +1,33 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faEraser } from "@fortawesome/free-solid-svg-icons";
-import classes from "./Search.module.css";
-import { Fragment, useState } from "react";
+import classes from "./SearchCharacters.module.css";
+import { Fragment } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { searchCharacterActions } from "../store/searchCharacterSlice";
 
-const Search = (props) => {
-  const [startsWith, setStartsWith] = useState("");
+const SearchCharacters = (props) => {
+  const dispatch = useDispatch();
+  const startWithCharacters = useSelector(
+    (state) => state.searchCharacter
+  ).characterNameStartsWith;
+
+  const limitCharacterNumber = useSelector(
+    (state) => state.searchCharacter
+  ).limitCharacterNumber;
 
   const min = 1;
   const max = 100;
 
-  const [limitCharacterNumber, setLimitCharacterNumber] = useState(1);
-
   const handleLimitChange = (event) => {
     const value = Math.max(min, Math.min(max, Number(event.target.value)));
-    setLimitCharacterNumber(value);
+    dispatch(searchCharacterActions.setLimitCharacterNumber(value));
   };
 
   const handleStartsWith = (event) => {
-    setStartsWith(event.target.value);
-  };
-
-  const handleClearData = (event) => {
-    event.preventDefault();
-    setStartsWith("");
-    setLimitCharacterNumber(1);
+    dispatch(
+      searchCharacterActions.setCharacterNameStartsWith(event.target.value)
+    );
+    console.log("startWithCharacters: " + startWithCharacters);
   };
 
   return (
@@ -40,12 +44,14 @@ const Search = (props) => {
               <input
                 type="text"
                 placeholder="Starts with..."
-                name="startsWith"
-                value={startsWith}
+                name="startWith"
+                value={startWithCharacters}
                 style={{ width: 150 + "px", margin: 10 + "px" }}
                 onChange={handleStartsWith}
               />
+
               <label>Limit</label>
+
               <input
                 type="number"
                 placeholder="Limit number..."
@@ -54,20 +60,23 @@ const Search = (props) => {
                 onChange={handleLimitChange}
                 style={{ width: 150 + "px", margin: 10 + "px" }}
               />
-              {/* <SelectOption /> */}
-              {/* <button type="submit" onClick={props.fetchCharacters}> */}
+
               <button
                 type="submit"
                 onClick={(e) => {
                   e.preventDefault();
-                  props.setStartsWithValue(startsWith);
-                  props.setLimitCharacterNumberValue(limitCharacterNumber);
+                  dispatch(searchCharacterActions.setDoSearch(true));
                 }}
               >
                 <FontAwesomeIcon icon={faSearch} />
               </button>
 
-              <button onClick={handleClearData}>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  dispatch(searchCharacterActions.clearSearchParameters());
+                }}
+              >
                 <FontAwesomeIcon icon={faEraser} />
               </button>
 
@@ -86,4 +95,4 @@ const Search = (props) => {
   );
 };
 
-export default Search;
+export default SearchCharacters;
