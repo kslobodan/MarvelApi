@@ -3,7 +3,8 @@ import { Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { searchComicActions } from "../store/searchComicSlice";
-import { NavLink } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEraser } from "@fortawesome/free-solid-svg-icons";
 
 const SearchComics = (props) => {
   const dispatch = useDispatch();
@@ -18,8 +19,8 @@ const SearchComics = (props) => {
     <Fragment>
       <div className={classes.topnav}>
         <div className={classes.Link}>
-          <Link to="/characters">
-            <a className={classes.active}>Home</a>
+          <Link to="/characters" href="">
+            <div className={classes.backButton}>Back</div>
           </Link>
         </div>
 
@@ -34,6 +35,15 @@ const SearchComics = (props) => {
                 style={{ width: 150 + "px", margin: 10 + "px" }}
                 onChange={handlerChangeSearchString}
               />
+
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  dispatch(searchComicActions.clearSearchString());
+                }}
+              >
+                <FontAwesomeIcon icon={faEraser} />
+              </button>
 
               <label style={{ marginLeft: 50 + "px" }}>
                 <h2>Search for favourite comic.</h2>

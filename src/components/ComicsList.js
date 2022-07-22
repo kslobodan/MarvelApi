@@ -4,10 +4,13 @@ import { useLocation } from "react-router-dom";
 import { Row, Col, Container } from "reactstrap";
 import Comic from "./Comic";
 import SearchComics from "./SearchComics";
+import { useSelector } from "react-redux";
 
 const ComicsList = () => {
   const [comics, setComics] = useState([]);
   const characterId = useLocation().state.characterId;
+
+  const searchString = useSelector((state) => state.searchComic).searchString;
 
   useEffect(() => {
     const fetchComics = async () => {
@@ -57,16 +60,19 @@ const ComicsList = () => {
       <Container>
         <Row>
           <Col>
-            {comics.map((comicInfo) => (
-              <Comic
-                key={comicInfo.id}
-                comicId={comicInfo.id}
-                title={comicInfo.title}
-                description={comicInfo.description}
-                imgHref={comicInfo.imgHref}
-                imgUrl={comicInfo.imgUrl}
-              />
-            ))}
+            {comics.map(
+              (comicInfo) =>
+                comicInfo.title.toLowerCase().includes(searchString) > 0 && (
+                  <Comic
+                    key={comicInfo.id}
+                    comicId={comicInfo.id}
+                    title={comicInfo.title}
+                    description={comicInfo.description}
+                    imgHref={comicInfo.imgHref}
+                    imgUrl={comicInfo.imgUrl}
+                  />
+                )
+            )}
           </Col>
         </Row>
       </Container>
