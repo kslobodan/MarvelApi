@@ -1,5 +1,7 @@
 import classes from "./Character.module.css";
 import { Link } from "react-router-dom";
+import { comicsActions } from "../store/comicsSlice";
+import { useDispatch } from "react-redux/es/exports";
 
 const Character = ({
   characterId,
@@ -9,6 +11,7 @@ const Character = ({
   description,
   modified,
 }) => {
+  const dispatch = useDispatch();
   return (
     <div className={classes.gallery}>
       <a href={imgHref}>
@@ -30,11 +33,11 @@ const Character = ({
         <button className="btn btn-primary btn-block">Details</button>
       </Link>
       <Link
+        onClick={(e) => {
+          dispatch(comicsActions.setCharacterId(characterId));
+        }}
         to={{
           pathname: `characters/${characterName}/comics`,
-          state: {
-            characterId: characterId,
-          },
         }}
       >
         <button className="btn btn-info btn-block">Comics</button>

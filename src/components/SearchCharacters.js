@@ -5,7 +5,7 @@ import { Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { searchCharacterActions } from "../store/searchCharacterSlice";
 
-const SearchCharacters = (props) => {
+const SearchCharacters = () => {
   const dispatch = useDispatch();
   const startWithCharacters = useSelector(
     (state) => state.searchCharacter
@@ -27,7 +27,6 @@ const SearchCharacters = (props) => {
     dispatch(
       searchCharacterActions.setCharacterNameStartsWith(event.target.value)
     );
-    console.log("startWithCharacters: " + startWithCharacters);
   };
 
   return (
@@ -66,7 +65,6 @@ const SearchCharacters = (props) => {
               />
 
               <button
-                type="submit"
                 onClick={(e) => {
                   e.preventDefault();
                   dispatch(searchCharacterActions.setDoSearch(true));

@@ -6,6 +6,7 @@ import classes from "./CharactersList.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { charactersActions } from "../store/charactersSlice";
 import { searchCharacterActions } from "../store/searchCharacterSlice";
+import { fetchCharacters } from "../store/actionsSlice";
 
 const CharactersList = () => {
   const dispatch = useDispatch();
@@ -25,73 +26,63 @@ const CharactersList = () => {
   ).limitCharacterNumber;
 
   useEffect(() => {
-    const fetchCharacters = async () => {
-      if (performSearch) {
-        console.log("data get");
-        const hash =
-          process.env.REACT_APP_MARVEL_TS +
-          process.env.REACT_APP_MARVEL_PRIVATE_KEY +
-          process.env.REACT_APP_MARVEL_PUBLIC_KEY;
-
-        var md5 = require("md5");
-
-        const startWith =
-          characterNameStartsWith === ""
-            ? ""
-            : "nameStartsWith=" + characterNameStartsWith + "&";
-
-        const limit =
-          limitCharNumber <= 1 || limitCharNumber > 100
-            ? ""
-            : "limit=" + limitCharNumber + "&";
-
-        const response = await fetch(
-          `https://gateway.marvel.com/v1/public/characters?${startWith}${limit}ts=${
-            process.env.REACT_APP_MARVEL_TS
-          }&apikey=${process.env.REACT_APP_MARVEL_PUBLIC_KEY}&hash=${md5(hash)}`
-        );
-
-        const responseData = await response.json();
-        const loadedCharacters = [];
-
-        if (
-          responseData !== undefined &&
-          responseData.data !== undefined &&
-          responseData.data.results !== undefined
-        ) {
-          setErrorGettingCharacters(false);
-
-          if (responseData.data.results.length !== 0) {
-            setCharactersListEmpty(false);
-            for (const key of responseData.data.results) {
-              const character = {
-                id: key.id,
-                characterId: key.id,
-                characterName: key.name,
-                imgHref: key.name,
-                imgUrl: key.thumbnail.path,
-                description: key.description,
-                modified: key.modified,
-                comics: key.comics,
-              };
-
-              loadedCharacters.push(character);
-              dispatch(searchCharacterActions.setDoSearch(false));
-            }
-          } else setCharactersListEmpty(true);
-        } else {
-          if (responseData.code === "RequestThrottled")
-            setErrorMessage("Too many Api requests, try latter...");
-
-          setErrorGettingCharacters(true);
-        }
-
-        dispatch(charactersActions.setCharactersList(loadedCharacters));
-      }
-    };
-
-    fetchCharacters();
-  }, [performSearch]);
+    // const fetchCharacters = async () => {
+    //   if (performSearch) {
+    //     console.log("data get");
+    //     const hash =
+    //       process.env.REACT_APP_MARVEL_TS +
+    //       process.env.REACT_APP_MARVEL_PRIVATE_KEY +
+    //       process.env.REACT_APP_MARVEL_PUBLIC_KEY;
+    //     var md5 = require("md5");
+    //     const startWith =
+    //       characterNameStartsWith === ""
+    //         ? ""
+    //         : "nameStartsWith=" + characterNameStartsWith + "&";
+    //     const limit =
+    //       limitCharNumber <= 1 || limitCharNumber > 100
+    //         ? ""
+    //         : "limit=" + limitCharNumber + "&";
+    //     const response = await fetch(
+    //       `https://gateway.marvel.com/v1/public/characters?${startWith}${limit}ts=${
+    //         process.env.REACT_APP_MARVEL_TS
+    //       }&apikey=${process.env.REACT_APP_MARVEL_PUBLIC_KEY}&hash=${md5(hash)}`
+    //     );
+    //     const responseData = await response.json();
+    //     const loadedCharacters = [];
+    //     if (
+    //       responseData !== undefined &&
+    //       responseData.data !== undefined &&
+    //       responseData.data.results !== undefined
+    //     ) {
+    //       setErrorGettingCharacters(false);
+    //       if (responseData.data.results.length !== 0) {
+    //         setCharactersListEmpty(false);
+    //         for (const key of responseData.data.results) {
+    //           const character = {
+    //             id: key.id,
+    //             characterId: key.id,
+    //             characterName: key.name,
+    //             imgHref: key.name,
+    //             imgUrl: key.thumbnail.path,
+    //             description: key.description,
+    //             modified: key.modified,
+    //           };
+    //           loadedCharacters.push(character);
+    //         }
+    //         dispatch(searchCharacterActions.setDoSearch(false));
+    //       } else setCharactersListEmpty(true);
+    //     } else {
+    //       if (responseData.code === "RequestThrottled")
+    //         setErrorMessage("Too many Api requests, try latter...");
+    //       setErrorGettingCharacters(true);
+    //     }
+    //     dispatch(charactersActions.setCharactersList(loadedCharacters));
+    //   }
+    // };
+    // fetchCharacters();
+    // }, [performSearch]);
+    // dispatch(fetchCharacters());
+  }, [dispatch]);
 
   const characterListPopulated =
     !errorGettingCharacters && !charactersListEmpty;
@@ -114,7 +105,6 @@ const CharactersList = () => {
                   imgUrl={character.imgUrl}
                   description={character.description}
                   modified={character.modified}
-                  comics={character.comics}
                 />
               ))}
             </Col>
