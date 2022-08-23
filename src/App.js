@@ -3,7 +3,7 @@ import { Route, Redirect } from "react-router-dom";
 import { useDispatch } from "react-redux/es/exports";
 import { useSelector } from "react-redux/es/exports";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./App.css";
+import "./app.css";
 import CharactersList from "./components/CharactersList";
 import CharacterDetails from "./components/CharacterDetails";
 import ComicsList from "./components/ComicsList";

@@ -1,104 +1,57 @@
 import { charactersActions } from "./charactersSlice";
 import { searchCharacterActions } from "./searchCharacterSlice";
 import { comicsActions } from "./comicsSlice";
-
-const hash =
-  process.env.REACT_APP_MARVEL_TS +
-  process.env.REACT_APP_MARVEL_PRIVATE_KEY +
-  process.env.REACT_APP_MARVEL_PUBLIC_KEY;
-
-const md5 = require("md5");
+import * as Constants from "../constants";
+import * as Services from "./services";
+import * as Notifications from "./notifications";
 
 export const fetchCharacters = (characterNameStartsWith, limitCharNumber) => {
   return async (dispatch) => {
     const fetchData = async () => {
-      const startWith =
-        characterNameStartsWith === ""
-          ? ""
-          : "nameStartsWith=" + characterNameStartsWith + "&";
-
-      const limit =
-        limitCharNumber < 1 || limitCharNumber > 100
-          ? ""
-          : "limit=" + limitCharNumber + "&";
-
-      const response = await fetch(
-        `https://gateway.marvel.com/v1/public/characters?${startWith}${limit}ts=${
-          process.env.REACT_APP_MARVEL_TS
-        }&apikey=${process.env.REACT_APP_MARVEL_PUBLIC_KEY}&hash=${md5(hash)}`
+      const response = await Services.getCharacters(
+        characterNameStartsWith,
+        limitCharNumber
       );
 
       if (!response.ok) {
-        throw new Error("Could not fetch characters!");
+        throw new Error(Constants.ERROR_FETCHING_CHARACTERS);
       }
 
-      const data = await response.json();
-
-      return data;
+      return await response.json();
     };
 
     try {
       const charactersData = await fetchData();
 
-      const loadedCharacters = [];
+      if (!charactersData?.data?.results) {
+        if (charactersData.code === Constants.REQUEST_THROTTLED)
+          Notifications.dispatchTooManyRequests(dispatch);
+        else Notifications.dispatchFatchingCharactersFailed(dispatch);
+        return;
+      }
 
-      if (
-        charactersData === undefined ||
-        charactersData.data === undefined ||
-        charactersData.data.results === undefined
-      ) {
-        if (charactersData.code === "RequestThrottled") {
-          dispatch(
-            charactersActions.showNotification({
-              status: "error",
-              title: "Error!",
-              message: "Too many Api requests, try latter...",
-            })
-          );
-        } else {
-          dispatch(
-            charactersActions.showNotification({
-              status: "error",
-              title: "Error!",
-              message: "Fetching characters failed",
-            })
-          );
-        }
-      } else if (charactersData.data.results.length === 0) {
-        dispatch(
-          charactersActions.showNotification({
-            status: "empty",
-            title: "Warning!",
-            message: "Characters list is empty",
-          })
-        );
+      if (charactersData.data.results.length === 0) {
+        Notifications.dispatchCharactersListEmpty(dispatch);
       } else {
-        for (const key of charactersData.data.results) {
-          const character = {
-            id: key.id,
-            characterId: key.id,
-            characterName: key.name,
-            imgHref: key.name,
-            imgUrl: key.thumbnail.path,
-            description: key.description,
-            modified: key.modified,
-          };
-
-          loadedCharacters.push(character);
-        }
+        const loadedCharacters = charactersData.data.results.map(
+          (character) => {
+            return {
+              key: character.id,
+              characterId: character.id,
+              characterName: character.name,
+              imgHref: character.name,
+              imgUrl: character.thumbnail.path,
+              description: character.description,
+              modified: character.modified,
+            };
+          }
+        );
 
         dispatch(searchCharacterActions.setDoSearch(false));
-
         dispatch(charactersActions.setCharactersList(loadedCharacters));
       }
     } catch (error) {
-      dispatch(
-        charactersActions.showNotification({
-          status: "error",
-          title: "Error!",
-          message: "Fetching characters data failed!",
-        })
-      );
+      Notifications.dispatchFatchingCharactersFailed(dispatch);
     }
   };
 };
@@ -106,14 +59,7 @@ export const fetchCharacters = (characterNameStartsWith, limitCharNumber) => {
 export const fetchComics = (characterId) => {
   return async (dispatch) => {
     const fetchData = async () => {
-      const characterIdNumber =
-        characterId === "" ? "" : "characters=" + characterId + "&";
-
-      const response = await fetch(
-        `https://gateway.marvel.com/v1/public/comics?${characterIdNumber}ts=${
-          process.env.REACT_APP_MARVEL_TS
-        }&apikey=${process.env.REACT_APP_MARVEL_PUBLIC_KEY}&hash=${md5(hash)}`
-      );
+      const response = await Services.getComics(characterId);
 
       if (!response.ok) {
         throw new Error("Could not fetch comics!");

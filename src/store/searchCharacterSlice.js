@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialSearchState = {
   characterNameStartsWith: "",
-  limitCharacterNumber: 1,
+  limitCharacterNumber: 10,
   doSearch: true,
 };
 

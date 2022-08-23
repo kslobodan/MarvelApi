@@ -38,7 +38,7 @@ const CharactersList = () => {
             <Col>
               {characters.map((character) => (
                 <Character
-                  key={character.id}
+                  key={character.key}
                   characterId={character.characterId}
                   characterName={character.characterName}
                   imgHref={character.imgHref}
