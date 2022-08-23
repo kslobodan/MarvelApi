@@ -12,7 +12,10 @@ export const WARNING_TITLE = "Warning!";
 export const TOO_MANY_REQUESTS = '"Too many Api requests, try latter...';
 export const FATCHING_CHARACTERS_FAILED = "Fetching characters data failed!";
 export const CHARACTERS_LIST_EMPTY = "Characters list is empty";
+export const FATCHING_COMICS_FAILED = "Fetching comics data failed!";
+export const COMICS_LIST_EMPTY = "Comics list is empty";
 
 export const REQUEST_THROTTLED = "RequestThrottled";
 
 export const ERROR_FETCHING_CHARACTERS = "Could not fetch characters!";
+export const ERROR_FETCHING_COMICS = "Could not fetch comics!";

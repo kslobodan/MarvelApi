@@ -13,9 +13,7 @@ export const fetchCharacters = (characterNameStartsWith, limitCharNumber) => {
         limitCharNumber
       );
 
-      if (!response.ok) {
-        throw new Error(Constants.ERROR_FETCHING_CHARACTERS);
-      }
+      if (!response.ok) throw new Error(Constants.ERROR_FETCHING_CHARACTERS);
 
       return await response.json();
     };
@@ -61,75 +59,39 @@ export const fetchComics = (characterId) => {
     const fetchData = async () => {
       const response = await Services.getComics(characterId);
 
-      if (!response.ok) {
-        throw new Error("Could not fetch comics!");
-      }
+      if (!response.ok) throw new Error(Constants.ERROR_FETCHING_COMICS);
 
-      const data = await response.json();
-
-      return data;
+      return await response.json();
     };
 
     try {
       const comicsData = await fetchData();
 
-      const loadedComics = [];
+      if (!comicsData?.data?.results) {
+        if (comicsData.code === Constants.REQUEST_THROTTLED)
+          Notifications.dispatchTooManyRequests(dispatch);
+        else Notifications.dispatchFatchingComicsFailed(dispatch);
+        return;
+      }
 
-      if (
-        comicsData === undefined ||
-        comicsData.data === undefined ||
-        comicsData.data.results === undefined
-      ) {
-        if (comicsData.code === "RequestThrottled") {
-          dispatch(
-            comicsActions.showNotification({
-              status: "error",
-              title: "Error!",
-              message: "Too many Api requests, try latter...",
-            })
-          );
-        } else {
-          dispatch(
-            comicsActions.showNotification({
-              status: "error",
-              title: "Error!",
-              message: "Fetching comics failed",
-            })
-          );
-        }
-      } else if (comicsData.data.results.length === 0) {
-        dispatch(
-          comicsActions.showNotification({
-            status: "empty",
-            title: "Warning!",
-            message: "Comics list is empty",
-          })
-        );
+      if (comicsData.data.results.length === 0) {
+        Notifications.dispatchComicsListEmpty(dispatch);
       } else {
-        for (const key of comicsData.data.results) {
-          const comic = {
-            id: key.id,
-            title: key.title,
-            imgHref: key.name,
-            imgUrl: key.thumbnail.path,
-            description: key.description,
-            modified: key.modified,
+        const loadedComics = comicsData.data.results.map((comic) => {
+          return {
+            key: comic.id,
+            title: comic.title,
+            imgHref: comic.name,
+            imgUrl: comic.thumbnail.path,
+            description: comic.description,
+            modified: comic.modified,
           };
-          loadedComics.push(comic);
-        }
-
-        // dispatch(searchCharacterActions.setDoSearch(false));
+        });
 
         dispatch(comicsActions.setComicsList(loadedComics));
       }
     } catch (error) {
-      dispatch(
-        comicsActions.showNotification({
-          status: "error",
-          title: "Error!",
-          message: "Fetching comics data failed!",
-        })
-      );
+      Notifications.dispatchFatchingComicsFailed(dispatch);
     }
   };
 };

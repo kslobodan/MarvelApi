@@ -22,7 +22,7 @@ const ComicsList = () => {
               (comicInfo) =>
                 comicInfo.title.toLowerCase().includes(searchString) > 0 && (
                   <Comic
-                    key={comicInfo.id}
+                    key={comicInfo.key}
                     title={comicInfo.title}
                     description={comicInfo.description}
                     imgHref={comicInfo.imgHref}

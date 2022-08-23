@@ -1,5 +1,8 @@
 import * as Constants from "../constants";
 import { charactersActions } from "./charactersSlice";
+import { comicsActions } from "./comicsSlice";
+
+//Characters
 
 export const dispatchCharactersListEmpty = (dispatch) => {
   dispatch(
@@ -27,6 +30,28 @@ export const dispatchFatchingCharactersFailed = (dispatch) => {
       status: Constants.ERROR_STATUS,
       title: Constants.ERROR_TITLE,
       message: Constants.FATCHING_CHARACTERS_FAILED,
+    })
+  );
+};
+
+//Comics
+
+export const dispatchFatchingComicsFailed = (dispatch) => {
+  dispatch(
+    comicsActions.showNotification({
+      status: Constants.ERROR_STATUS,
+      title: Constants.ERROR_TITLE,
+      message: Constants.FATCHING_COMICS_FAILED,
+    })
+  );
+};
+
+export const dispatchComicsListEmpty = (dispatch) => {
+  dispatch(
+    comicsActions.showNotification({
+      status: Constants.EMPTY_STATUS,
+      title: Constants.WARNING_TITLE,
+      message: Constants.COMICS_LIST_EMPTY,
     })
   );
 };
